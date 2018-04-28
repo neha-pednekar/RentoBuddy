@@ -1,0 +1,204 @@
+﻿@model RentoBuddy.Models.CartViewModels.OrderModel
+
+@{
+    ViewData["Title"] = "Order";
+}
+
+<div class="container">
+    <div class="page-header">
+    </div>
+    <!-- Simple Invoice - START -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center">
+                    <i class="fa fa-search-plus pull-left icon"></i>
+                    <h2>Customer Invoice #@Model.OrderReceiptNumber</h2>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-12 col-md-4 col-lg-4 pull-left">
+                        <div class="panel panel-default height">
+                            <div class="panel-heading">Billing Details</div>
+                            <div class="panel-body">
+                                <strong>@(Model.CustomerModel.FirstName + " " + Model.CustomerModel.LastName)</strong><br>
+                                @Model.CustomerModel.Address.AddressLine1_Billing<br>
+                                @Model.CustomerModel.Address.City_Billing<br>
+                                @Model.CustomerModel.Address.State_Billing<br>
+                                <strong>@Model.CustomerModel.Address.ZipCode_Billing</strong><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4 col-lg-4">
+                        <div class="panel panel-default height">
+                            <div class="panel-heading">Payment Information</div>
+                            <div class="panel-body">
+                                <strong>Card Type:</strong> @Model.PaymentModel.PaymentMode<br>
+                                <strong>Name on Card:</strong> @Model.PaymentModel.NameOnCard<br>
+                                <strong>Card Number:</strong> @Model.PaymentModel.CardNumber<br>
+                                <strong>Exp Date:</strong> @Model.PaymentModel.ExpirationDate<br>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4 col-lg-4">
+                        <div class="panel panel-default height">
+                            <div class="panel-heading">Order Preferences</div>
+                            <div class="panel-body">
+                                <strong>Gift:</strong> No<br>
+                                <strong>Express Delivery:</strong> Yes<br>
+                                <strong>Insurance:</strong> No<br>
+                                <strong>Coupon:</strong> No<br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4 col-lg-4 pull-right">
+                        <div class="panel panel-default height">
+                            <div class="panel-heading">Shipping Address</div>
+                            <div class="panel-body">
+                                <strong>@(Model.CustomerModel.FirstName + " " + Model.CustomerModel.LastName)</strong><br>
+                                @Model.CustomerModel.Address.AddressLine1_Shipping<br>
+                                @Model.CustomerModel.Address.City_Shipping<br>
+                                @Model.CustomerModel.Address.State_Shipping<br>
+                                <strong>@Model.CustomerModel.Address.ZipCode_Shipping</strong><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="text-center"><strong>Order Summary</strong></h3>
+                        <br />
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td><strong>Product Name</strong></td>
+                                        <td class="text-center"><strong>Product Rental Price</strong></td>
+                                        <td class="text-center"><strong>Product Quantity</strong></td>
+                                        <td class="text-center"><strong>Rental Deposit</strong></td>
+                                        <td class="text-center"><strong>Rental Duration</strong></td>
+                                        <td class="text-center"><strong>Rent Start Date</strong></td>
+                                        <td class="text-center"><strong>Rent End Date</strong></td>
+                                        <td class="text-right"><strong>Product Total</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.OrderProductModel)
+                                    {
+                                    <tr>
+                                        <td>@product.ProductData[0].ProductName</td>
+                                        <td class="text-center">$@product.RentAmount</td>
+                                        <td class="text-center">@product.Quantity</td>
+                                        <td class="text-center">@product.RentalDeposit</td>
+                                        <td class="text-center">@product.RentalDurationInMonths months</td>
+                                        <td class="text-center">@product.RentStartDate.ToShortDateString()</td>
+                                        <td class="text-center">@product.RentEndDate.ToShortDateString()</td>
+                                        <td class="text-right">$@product.RentAmount</td>
+                                    </tr>
+                                    }
+                                    <tr>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow text-center"><strong>Sub Total</strong></td>
+                                        <td class="highrow text-right">$@Model.TotalRentAmount</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow text-center"><strong>Discount Applied</strong></td>
+                                        <td class="highrow text-right">$@Model.DiscountApplied</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow text-center"><strong>Tax Applied</strong></td>
+                                        <td class="emptyrow text-right">$@Model.TaxesApplied</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow"></td>
+                                        <td class="emptyrow text-center"><strong>Rental Deposit</strong></td>
+                                        <td class="emptyrow text-right">$@Model.TotalRentalDeposit</td>
+                                    </tr>
+                                    <hr />
+                                    <tr>
+                                        <td class="highrow"><i class="fa fa-barcode iconbig"></i></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow text-center"><strong>TOTAL</strong></td>
+                                        <td class="highrow text-right">$@Model.TotalCostForOrder</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                        <td class="highrow"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+
+        .height {
+            min-height: 200px;
+        }
+
+        .icon {
+            font-size: 47px;
+            color: #717fe0;
+        }
+
+        .iconbig {
+            font-size: 77px;
+            color: #717fe0;
+        }
+
+        .table > tbody > tr > .emptyrow {
+            border-top: none;
+        }
+
+        .table > thead > tr > .emptyrow {
+            border-bottom: none;
+        }
+
+        .table > tbody > tr > .highrow {
+            border-top: 3px solid;
+        }
+    </style>
+    <!-- Simple Invoice - END -->
+</div>
